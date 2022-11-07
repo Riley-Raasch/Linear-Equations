@@ -1,7 +1,7 @@
 .data
     array: .space 20 
     input: .space 20 
-    exceptionMessage: .asciiz "input error!"
+    noSolution: .asciiz "no solution"
     x1: .asciiz "x1 = "
     x2: .asciiz "x2 = " 
     x3: .asciiz "x3 = "       
@@ -10,6 +10,7 @@
 .text
 
 main:
+#stack implementation of reading input into the memory
 la $s0, array #the array is in $s0
 
 li $t1, 1 #number of inputs put in array
@@ -36,6 +37,49 @@ addi $s0, $s0, 4
 
 stop:
 j $ra 
+
+
+#Gaussian Elimination
+
+#row 1
+#divide each value in row 1 (including result) by row 1, column 1
+    
+    #store row 1, column 1
+    lwc1 $t0, 0($s0)
+    #divide
+    div $t1, $t0, $t0 #r1, c1 = 1
+    swc1 $t1, 0($s0) #store back into array
+
+    #increment index
+    addi $s0, $s0, 4
+
+    lwc1 $t2, 0($s0) #r1, c2
+    div $t2, $t2, $t0 # (r1, c2)/(r1, c1)
+    swc1 $t2, 0($s0)
+
+    #increment index
+    addi $s0, $s0, 4
+
+    lwc1 $t3, 0($s0) #r1, c3
+    div $t3, $t3, $t0 #(r1, c3)/(r1, c1)
+    swc1 $t3, 0($s0)
+
+
+#each row 2 value - corresponding row 1 values
+    
+    
+
+#each row 3 value - row 1 result*corresponding row 1 value
+
+#row 2
+#each second row value / row 2, column 2
+#each row 1 value - corresponding row 2 values
+#each row 3 value - row 3, column 2* corresponding row 2 values
+
+#row 3
+#each row 3 value / row 3, column 3
+#each row 1 value - corresponding row 3 value
+#each row 2 value - row 2, column 3*corresponding row 3 value
 
 
 endProgram:
