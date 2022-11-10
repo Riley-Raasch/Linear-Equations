@@ -1,46 +1,48 @@
 .data
-    array: .space 20 
-    input: .space 20 
-    noSolution: .asciiz "no solution"
-    x1: .asciiz "x1 = "
-    x2: .asciiz "x2 = " 
-    x3: .asciiz "x3 = "       
-    newLine: .asciiz "\n"
-
+    size: .word 12
+    input: .float 0.0
+    array: .float 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
 .text
 
 main:
-#stack implementation of reading input into the memory
-la $s0, array #the array is in $s0
+lwc1 $f1, input
 
-li $t1, 1 #number of inputs put in array
+#size
+la $s1, size
+lw $s2, 0($s1)
+la $s0, array #array in $s0
+
+li $t1, 0 #number of inputs put in array (i)
 li $t2, 12 # stores 12
 
 inputLoop:
 
 #read float
-lwc1 $f0, input 
 li $v0, 6
 syscall
 
 #save in array
-swc1 $f1 ($s0)
+swc1 $f0, 0($s1)
+
+lwc1 $f1, 0($s1)
+
+#print float
+li $v0, 2
+add.s $f12, $f0, $f1
+syscall
 
 #increment index
 addi $t1, $t1, 1 #i++
 
 #when it takes 12 inputs stop
-beq $t1, $t2, stop 
+beq $t1, $t2, GaussianElimination
+addi $s0, $s0, 4 #next element pls
 
-#next element in array
-addi $s0, $s0, 4 
-
-stop:
-j $ra 
+j inputLoop
 
 
 #Gaussian Elimination
-
+GaussianElimination:
 #row 1
 #divide each value in row 1 (including result) by row 1, column 1
     
