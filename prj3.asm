@@ -1,6 +1,7 @@
 .data
     size: .word 12
     input: .float 0.0
+    zero: .float 0.0
     array: .float 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
     noSolution: .asciiz "no solution"
     x1: .asciiz "x1 = "
@@ -19,6 +20,7 @@ la $s0, array #array in $s0
 
 li $t1, 0 #number of inputs put in array (i)
 li $t2, 12 # stores 12
+lwc1 $f30, zero
 
 inputLoop:
 
@@ -77,6 +79,13 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     #finally make (1,1) 1 by dividing by itself
     div.s $f2, $f2, $f2
 
+    #zero check
+    c.eq.s $f10, $f30
+    bc1t exception
+    c.eq.s $f2, $f30
+    bc1t exception
+    c.eq.s $f6, $f30
+
 #each row 2 value - corresponding row 1 values
 
     #(2,1)=(2,1)-(1,1)
@@ -84,12 +93,22 @@ lwc1 $f14, 44($s0) #result 3 in $f14
 
     #(2,2)-=(1,2)
     sub.s $f6, $f6, $f3
+    #zero check
+    c.eq.s $f6, $f30
+    bc1t exception
 
     #(2,3)-=(1,3)
     sub.s $f7, $f7, $f4
 
     #result 2 -= result 1
     sub.s $f13, $f13, $f11
+
+    #zero check
+    c.eq.s $f10, $f30
+    bc1t exception
+    c.eq.s $f2, $f30
+    bc1t exception
+    c.eq.s $f6, $f30
 
 #each row 3 value - row 1 result*corresponding row 1 value
     
@@ -104,10 +123,20 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     #(3,3)=(3,3) - result 1 * (1,3)
     mul.s $f31, $f11, $f4
     sub.s $f10, $f10, $f31
+    #zero check
+    c.eq.s $f10, $f30
+    bc1t exception
 
     #result 3 = result 3 - result 1 * result 1
     mul.s $f31, $f11, $f11
     sub.s $f14, $f14, $f31
+
+    #zero check
+    c.eq.s $f10, $f30
+    bc1t exception
+    c.eq.s $f2, $f30
+    bc1t exception
+    c.eq.s $f6, $f30
 
 #row 2
 #each second row value / row 2, column 2
@@ -124,10 +153,20 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     #finally divide (2,2)/(2,2) to make it 1
     div.s $f6, $f6, $f6
 
+    #zero check
+    c.eq.s $f10, $f30
+    bc1t exception
+    c.eq.s $f2, $f30
+    bc1t exception
+    c.eq.s $f6, $f30
+
 #each row 1 value - corresponding row 2 values
 
     #(1,1) = (1,1) - (2,1)
     sub.s $f2, $f2, $f5
+    #zero check
+    c.eq.s $f2, $f30
+    bc1t exception
 
     #(1,2) = (1,2) - (2,2)
     sub.s $f3, $f3, $f6
@@ -138,6 +177,13 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     #result 1 = result 1 - result 2
     sub.s $f11, $f11, $f13
 
+    #zero check
+    c.eq.s $f10, $f30
+    bc1t exception
+    c.eq.s $f2, $f30
+    bc1t exception
+    c.eq.s $f6, $f30
+
 #each row 3 value - (3,2)* corresponding row 2 values
 
     #(3,1) = (3,1) - (3,2)*(2,1)
@@ -147,6 +193,9 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     #(3,3) = (3,3) - (3,2)*(2,3)
     mul.s $f31, $f9, $f7
     sub.s $f10, $f10, $f31
+    #zero check
+    c.eq.s $f10, $f30
+    bc1t exception
 
     #result 3 = result 3 - (3,2) * result 2
     mul.s $f31, $f9, $f13
@@ -155,6 +204,13 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     #(3,2) = (3,2) - (3,2)*(2,2) to make it 0 
     mul.s $f31, $f9, $f6
     sub.s $f9, $f9, $f31
+
+    #zero check
+    c.eq.s $f10, $f30
+    bc1t exception
+    c.eq.s $f2, $f30
+    bc1t exception
+    c.eq.s $f6, $f30
 
 #row 3
 #each row 3 value / (3,3)
@@ -171,10 +227,20 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     #(3,3)/(3,3)=1
     div.s $f10, $f10, $f10
 
+    #zero check
+    c.eq.s $f10, $f30
+    bc1t exception
+    c.eq.s $f2, $f30
+    bc1t exception
+    c.eq.s $f6, $f30
+
 #each row 1 value - corresponding row 3 value
 
     #(1,1) - (3,1)
     sub.s $f2, $f2, $f8
+    #zero check
+    c.eq.s $f2, $f30
+    bc1t exception
 
     #(1,2) - (3,2)
     sub.s $f3, $f3, $f9
@@ -185,6 +251,13 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     #result 1 - result 3
     sub.s $f11, $f11, $f14
 
+    #zero check
+    c.eq.s $f10, $f30
+    bc1t exception
+    c.eq.s $f2, $f30
+    bc1t exception
+    c.eq.s $f6, $f30
+
 #each row 2 value - row 2, column 3*corresponding row 3 value
     #(2,1) = (2,1) - (2,3)*(3,1)
     mul.s $f31, $f7, $f8
@@ -193,6 +266,9 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     #(2,2) = (2,2) - (2,3)*(3,2)
     mul.s $f31, $f7, $f9
     sub.s $f6, $f6, $f31
+    #zero check
+    c.eq.s $f6, $f30
+    bc1t exception
 
     #result 2 = result 2 - (2,3)* result 3
     mul.s $f31, $f7, $f14
@@ -201,6 +277,13 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     #(2,3) = (2,3) - (2,3)*(3,2)=0
     mul.s $f31, $f7, $f10
     sub.s $f7, $f7, $f31
+
+    #zero check
+    c.eq.s $f10, $f30
+    bc1t exception
+    c.eq.s $f2, $f30
+    bc1t exception
+    c.eq.s $f6, $f30
 
 
 print:
@@ -253,3 +336,10 @@ syscall
 endProgram:
 li $v0, 10      
 syscall
+
+exception:
+#print no solution
+li $v0, 4
+la $a0, noSolution
+syscall
+j endProgram
