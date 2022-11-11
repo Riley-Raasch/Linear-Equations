@@ -27,9 +27,9 @@ li $v0, 6
 syscall
 
 #save in array
-swc1 $f0, 0($s1)
+swc1 $f0, 0($s0)
 
-lwc1 $f1, 0($s1)
+lwc1 $f1, 0($s0)
 
 #increment index
 addi $t1, $t1, 1 #i++
@@ -43,32 +43,36 @@ j inputLoop
 
 #Gaussian Elimination
 GaussianElimination:
+
+addiu $s0, $s0, -48
 #row 1
 #divide each value in row 1 (including result) by row 1, column 1
-    
+
     #store row 1, column 1
-    lwc1 $t0, 0($s0)
+    lwc1 $f2, 0($s0)
+
+    divisionMatrixLoop:    
+    #store row 1, column 1
+    lwc1 $f3, 0($s0)
     #divide
-    div $t1, $t0, $t0 #r1, c1 = 1
-    swc1 $t1, 0($s0) #store back into array
+    div.s $f5, $f3, $f2 #r1, c1 = 1
+    swc1 $f5, 0($s0) #store back into array
 
     #increment index
-    addi $s0, $s0, 4
+    addiu $s0, $s0, 4
 
-    lwc1 $t2, 0($s0) #r1, c2
-    div $t2, $t2, $t0 # (r1, c2)/(r1, c1)
-    swc1 $t2, 0($s0)
+    beq $s0, $t2, divisionResult #check if third element 
 
-    #increment index
-    addi $s0, $s0, 4
-
-    lwc1 $t3, 0($s0) #r1, c3
-    div $t3, $t3, $t0 #(r1, c3)/(r1, c1)
-    swc1 $t3, 0($s0)
+    divisionResult:
+    addiu $s0, $s0, 28
+    #store row 1, column 4
+    lwc1 $f3, 0($s0)
+    #divide
+    div.s $f5, $f3, $f2 #r1, c4 = 1
+    swc1 $f5, 0($s0) #store back into array
 
 
 #each row 2 value - corresponding row 1 values
-    
     
 
 #each row 3 value - row 1 result*corresponding row 1 value
@@ -87,7 +91,7 @@ GaussianElimination:
 
 print:
 #start with first result index (i=9)
-addi $s0, $s0, -8
+addi $s0, $s0, -48
 
 #print x1 = 
 li $v0, 4
