@@ -101,11 +101,19 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     sub.s $f5, $f5, $f31
 
     #zero check
-    c.eq.s $f10, $f30
+    add.s $f29, $f2, $f3
+    add.s $f29, $f29, $f4
+    c.eq.s $f29, $f30
     bc1t exception
-    c.eq.s $f2, $f30
+
+    add.s $f28, $f5, $f6
+    add.s $f28, $f28, $f7
+    c.eq.s $f28, $f30
     bc1t exception
-    c.eq.s $f6, $f30
+
+    add.s $f27, $f8, $f9
+    add.s $f27, $f27, $f10
+    c.eq.s $f27, $f30
     bc1t exception
 
 #each row 3 value - (3,1)*corresponding row 1 value
@@ -117,9 +125,6 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     #(3,3)=(3,3) - (3,1) * (1,3)
     mul.s $f31, $f8, $f4
     sub.s $f10, $f10, $f31
-    #zero check
-    c.eq.s $f10, $f30
-    bc1t exception
 
     #result 3 = result 3 - (3,1) * result 1
     mul.s $f31, $f8, $f11
@@ -130,11 +135,19 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     sub.s $f8, $f8, $f31
 
     #zero check
-    c.eq.s $f10, $f30
+    add.s $f29, $f2, $f3
+    add.s $f29, $f29, $f4
+    c.eq.s $f29, $f30
     bc1t exception
-    c.eq.s $f2, $f30
+
+    add.s $f28, $f5, $f6
+    add.s $f28, $f28, $f7
+    c.eq.s $f28, $f30
     bc1t exception
-    c.eq.s $f6, $f30
+
+    add.s $f27, $f8, $f9
+    add.s $f27, $f27, $f10
+    c.eq.s $f27, $f30
     bc1t exception
 
 #row 2
@@ -153,11 +166,19 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     div.s $f6, $f6, $f6
 
     #zero check
-    c.eq.s $f10, $f30
+    add.s $f29, $f2, $f3
+    add.s $f29, $f29, $f4
+    c.eq.s $f29, $f30
     bc1t exception
-    c.eq.s $f2, $f30
+
+    add.s $f28, $f5, $f6
+    add.s $f28, $f28, $f7
+    c.eq.s $f28, $f30
     bc1t exception
-    c.eq.s $f6, $f30
+
+    add.s $f27, $f8, $f9
+    add.s $f27, $f27, $f10
+    c.eq.s $f27, $f30
     bc1t exception
 
 #each row 1 value - (1,2)*corresponding row 2 values
@@ -165,9 +186,6 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     #(1,1) = (1,1) - (1,2)*(2,1)
     mul.s $f31, $f3, $f5
     sub.s $f2, $f2, $f31
-    #zero check
-    c.eq.s $f2, $f30
-    bc1t exception
 
     #(1,3) = (1,3) - (1,2)*(2,3)
     mul.s $f31, $f3, $f7
@@ -182,11 +200,19 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     sub.s $f3, $f3, $f31
 
     #zero check
-    c.eq.s $f10, $f30
+    add.s $f29, $f2, $f3
+    add.s $f29, $f29, $f4
+    c.eq.s $f29, $f30
     bc1t exception
-    c.eq.s $f2, $f30
+
+    add.s $f28, $f5, $f6
+    add.s $f28, $f28, $f7
+    c.eq.s $f28, $f30
     bc1t exception
-    c.eq.s $f6, $f30
+
+    add.s $f27, $f8, $f9
+    add.s $f27, $f27, $f10
+    c.eq.s $f27, $f30
     bc1t exception
 
 #each row 3 value - (3,2)* corresponding row 2 values
@@ -198,9 +224,6 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     #(3,3) = (3,3) - (3,2)*(2,3)
     mul.s $f31, $f9, $f7
     sub.s $f10, $f10, $f31
-    #zero check
-    c.eq.s $f10, $f30
-    bc1t exception
 
     #result 3 = result 3 - (3,2) * result 2
     mul.s $f31, $f9, $f13
@@ -211,11 +234,19 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     sub.s $f9, $f9, $f31
 
     #zero check
-    c.eq.s $f10, $f30
+    add.s $f29, $f2, $f3
+    add.s $f29, $f29, $f4
+    c.eq.s $f29, $f30
     bc1t exception
-    c.eq.s $f2, $f30
+
+    add.s $f28, $f5, $f6
+    add.s $f28, $f28, $f7
+    c.eq.s $f28, $f30
     bc1t exception
-    c.eq.s $f6, $f30
+
+    add.s $f27, $f8, $f9
+    add.s $f27, $f27, $f10
+    c.eq.s $f27, $f30
     bc1t exception
 
 #row 3
@@ -234,21 +265,25 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     div.s $f10, $f10, $f10
 
     #zero check
-    c.eq.s $f10, $f30
-    bc1t exception
-    c.eq.s $f2, $f30
-    bc1t exception
-    c.eq.s $f6, $f30
+    add.s $f29, $f2, $f3
+    add.s $f29, $f29, $f4
+    c.eq.s $f29, $f30
     bc1t exception
 
+    add.s $f28, $f5, $f6
+    add.s $f28, $f28, $f7
+    c.eq.s $f28, $f30
+    bc1t exception
+
+    add.s $f27, $f8, $f9
+    add.s $f27, $f27, $f10
+    c.eq.s $f27, $f30
+    bc1t exception
 #each row 1 value - (1,3)*corresponding row 3 value
 
     #(1,1) - (1,3)*(3,1)
     mul.s $f31, $f4, $f8
     sub.s $f2, $f2, $f31
-    #zero check
-    c.eq.s $f2, $f30
-    bc1t exception
 
     #(1,2) - (1,3)*(3,2)
     mul.s $f31, $f4, $f9
@@ -263,11 +298,19 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     sub.s $f4, $f4, $f31
 
     #zero check
-    c.eq.s $f10, $f30
+    add.s $f29, $f2, $f3
+    add.s $f29, $f29, $f4
+    c.eq.s $f29, $f30
     bc1t exception
-    c.eq.s $f2, $f30
+
+    add.s $f28, $f5, $f6
+    add.s $f28, $f28, $f7
+    c.eq.s $f28, $f30
     bc1t exception
-    c.eq.s $f6, $f30
+
+    add.s $f27, $f8, $f9
+    add.s $f27, $f27, $f10
+    c.eq.s $f27, $f30
     bc1t exception
 
 #each row 2 value - row 2, column 3*corresponding row 3 value
@@ -291,12 +334,20 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     sub.s $f7, $f7, $f31
 
     #zero check
-    c.eq.s $f10, $f30
+    add.s $f29, $f2, $f3
+    add.s $f29, $f29, $f4
+    c.eq.s $f29, $f30
     bc1t exception
-    c.eq.s $f2, $f30
+
+    add.s $f28, $f5, $f6
+    add.s $f28, $f28, $f7
+    c.eq.s $f28, $f30
     bc1t exception
-    c.eq.s $f6, $f30
-    bc1t exception  
+
+    add.s $f27, $f8, $f9
+    add.s $f27, $f27, $f10
+    c.eq.s $f27, $f30
+    bc1t exception
 
 
 
