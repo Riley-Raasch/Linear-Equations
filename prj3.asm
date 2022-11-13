@@ -70,7 +70,7 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     #divide (1,2)/(1,1) and store it back into (1,2)
     div.s $f3, $f3, $f2
 
-    #divide (1,3)/(1,2)
+    #divide (1,3)/(1,1)
     div.s $f4, $f4, $f2 
 
     #divide result 1/(1,1)
@@ -79,57 +79,55 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     #finally make (1,1) 1 by dividing by itself
     div.s $f2, $f2, $f2
 
+#each row 2 value - corresponding row 1 values*(2,1)
+
+    #(2,2)-=(1,2)*(2,1)
+    mul.s $f31, $f3, $f5
+    sub.s $f6, $f6, $f31
+    #zero check
+    c.eq.s $f6, $f30
+    bc1t exception
+
+    #(2,3)-=(1,3)*(2,1)
+    mul.s $f31, $f4, $f5
+    sub.s $f7, $f7, $f31
+
+    #result 2 -= result 1*(2,1)
+    mul.s $f31, $f11, $f5
+    sub.s $f13, $f13, $f31
+
+    #(2,1)=(2,1)-(1,1)*(2,1)
+    mul.s $f31, $f2, $f5
+    sub.s $f5, $f5, $f31
+
     #zero check
     c.eq.s $f10, $f30
     bc1t exception
     c.eq.s $f2, $f30
     bc1t exception
     c.eq.s $f6, $f30
-
-#each row 2 value - corresponding row 1 values
-
-    #(2,1)=(2,1)-(1,1)
-    sub.s $f5, $f5, $f2
-
-    #(2,2)-=(1,2)
-    sub.s $f6, $f6, $f3
-    #zero check
-    c.eq.s $f6, $f30
     bc1t exception
 
-    #(2,3)-=(1,3)
-    sub.s $f7, $f7, $f4
+#each row 3 value - (3,1)*corresponding row 1 value
 
-    #result 2 -= result 1
-    sub.s $f13, $f13, $f11
-
-    #zero check
-    c.eq.s $f10, $f30
-    bc1t exception
-    c.eq.s $f2, $f30
-    bc1t exception
-    c.eq.s $f6, $f30
-
-#each row 3 value - row 1 result*corresponding row 1 value
-    
-    #(3,1)= (3,1) - result 1 * (1,1)
-    mul.s $f31, $f11, $f2 #$f31 is tmp variable
-    sub.s $f8, $f8, $f31
-
-    #(3,2)=(3,2) - result 1 * (1,2)
-    mul.s $f31, $f11, $f3
+    #(3,2)=(3,2) - (3,1) * (1,2)
+    mul.s $f31, $f8, $f3
     sub.s $f9, $f9, $f31
 
-    #(3,3)=(3,3) - result 1 * (1,3)
-    mul.s $f31, $f11, $f4
+    #(3,3)=(3,3) - (3,1) * (1,3)
+    mul.s $f31, $f8, $f4
     sub.s $f10, $f10, $f31
     #zero check
     c.eq.s $f10, $f30
     bc1t exception
 
-    #result 3 = result 3 - result 1 * result 1
-    mul.s $f31, $f11, $f11
+    #result 3 = result 3 - (3,1) * result 1
+    mul.s $f31, $f8, $f11
     sub.s $f14, $f14, $f31
+
+    #(3,1)= (3,1) - (3,1) * (1,1)
+    mul.s $f31, $f8, $f2 #$f31 is tmp variable
+    sub.s $f8, $f8, $f31
 
     #zero check
     c.eq.s $f10, $f30
@@ -137,6 +135,7 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     c.eq.s $f2, $f30
     bc1t exception
     c.eq.s $f6, $f30
+    bc1t exception
 
 #row 2
 #each second row value / row 2, column 2
@@ -159,23 +158,28 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     c.eq.s $f2, $f30
     bc1t exception
     c.eq.s $f6, $f30
+    bc1t exception
 
-#each row 1 value - corresponding row 2 values
+#each row 1 value - (1,2)*corresponding row 2 values
 
-    #(1,1) = (1,1) - (2,1)
-    sub.s $f2, $f2, $f5
+    #(1,1) = (1,1) - (1,2)*(2,1)
+    mul.s $f31, $f3, $f5
+    sub.s $f2, $f2, $f31
     #zero check
     c.eq.s $f2, $f30
     bc1t exception
 
-    #(1,2) = (1,2) - (2,2)
-    sub.s $f3, $f3, $f6
+    #(1,3) = (1,3) - (1,2)*(2,3)
+    mul.s $f31, $f3, $f7
+    sub.s $f4, $f4, $f31
 
-    #(1,3) = (1,3) - (2,3)
-    sub.s $f4, $f4, $f7
+    #result 1 = result 1 - (1,2)*result 2
+    mul.s $f31, $f3, $f13
+    sub.s $f11, $f11, $f31
 
-    #result 1 = result 1 - result 2
-    sub.s $f11, $f11, $f13
+    #(1,2) = (1,2) - (1,2)*(2,2)
+    mul.s $f31, $f3, $f6
+    sub.s $f3, $f3, $f31
 
     #zero check
     c.eq.s $f10, $f30
@@ -183,6 +187,7 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     c.eq.s $f2, $f30
     bc1t exception
     c.eq.s $f6, $f30
+    bc1t exception
 
 #each row 3 value - (3,2)* corresponding row 2 values
 
@@ -211,6 +216,7 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     c.eq.s $f2, $f30
     bc1t exception
     c.eq.s $f6, $f30
+    bc1t exception
 
 #row 3
 #each row 3 value / (3,3)
@@ -233,23 +239,28 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     c.eq.s $f2, $f30
     bc1t exception
     c.eq.s $f6, $f30
+    bc1t exception
 
-#each row 1 value - corresponding row 3 value
+#each row 1 value - (1,3)*corresponding row 3 value
 
-    #(1,1) - (3,1)
-    sub.s $f2, $f2, $f8
+    #(1,1) - (1,3)*(3,1)
+    mul.s $f31, $f4, $f8
+    sub.s $f2, $f2, $f31
     #zero check
     c.eq.s $f2, $f30
     bc1t exception
 
-    #(1,2) - (3,2)
-    sub.s $f3, $f3, $f9
+    #(1,2) - (1,3)*(3,2)
+    mul.s $f31, $f4, $f9
+    sub.s $f3, $f3, $f31
 
-    #(1,3) - (3,3)
-    sub.s $f4, $f4, $f10
+    #result 1 - (1,3)*result 3
+    mul.s $f31, $f4, $f14
+    sub.s $f11, $f11, $f31
 
-    #result 1 - result 3
-    sub.s $f11, $f11, $f14
+    #(1,3) - (1,3)*(3,3)
+    mul.s $f31, $f4, $f10
+    sub.s $f4, $f4, $f31
 
     #zero check
     c.eq.s $f10, $f30
@@ -257,6 +268,7 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     c.eq.s $f2, $f30
     bc1t exception
     c.eq.s $f6, $f30
+    bc1t exception
 
 #each row 2 value - row 2, column 3*corresponding row 3 value
     #(2,1) = (2,1) - (2,3)*(3,1)
@@ -284,6 +296,8 @@ lwc1 $f14, 44($s0) #result 3 in $f14
     c.eq.s $f2, $f30
     bc1t exception
     c.eq.s $f6, $f30
+    bc1t exception  
+
 
 
 print:
@@ -341,5 +355,10 @@ exception:
 #print no solution
 li $v0, 4
 la $a0, noSolution
+syscall
+
+#new line
+li $v0, 4
+la $a0, newLine
 syscall
 j endProgram
